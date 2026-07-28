@@ -1,0 +1,22 @@
+name: CompactObject
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - setuptools>=61
+  - wheel
+  - corner
+  - h5py
+  - ipykernel
+  - jupyter
+  - lxml
+  - matplotlib
+  - nbconvert
+  - numba
+  - numpy
+  - pandas
+  - requests
+  - scipy
+  - sympy
+  - ultranest

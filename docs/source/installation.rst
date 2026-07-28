@@ -1,268 +1,115 @@
 Installation
 ============
 
-CompactObject is an open-source package designed for comprehensive neutron star EOS inference. It is built to be easy to install and use. Follow the step-by-step installation guide below to get started.
+CompactObject supports installation with either Python's ``venv`` module or
+Conda. The package name on PyPI is ``CompactObject-TOV``.
 
-Using Python Virtual Environment (Recommended)
-----------------------------------------------
+Python virtual environment
+--------------------------
 
-If you are not using Anaconda, you can create a virtual environment using Python's ``venv`` module:
-
-Step 1: Create a Virtual Environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Run the following command to create a virtual environment named ``CompactObject``:
+Create and activate an isolated environment:
 
 .. code-block:: bash
 
-   python3 -m venv CompactObject
+   python3 -m venv .venv
+   source .venv/bin/activate
+   python -m pip install --upgrade pip
 
-*You can specify a different path by replacing ``CompactObject`` with your desired directory name.*
+On Windows, activate the environment with ``.venv\Scripts\activate`` instead.
 
-Step 2: Activate the Environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Activate the virtual environment with:
-
-.. code-block:: bash
-
-   source CompactObject/bin/activate
-
-Step 3: Install the CompactObject Package
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Once the environment is activated, you can install the package from PyPI, which is called ``CompactObject-TOV``:
+Install the released package:
 
 .. code-block:: bash
 
-   pip install CompactObject-TOV
+   python -m pip install CompactObject-TOV
 
-The dependencies should be automatically installed for you.
-This includes the packages used by the shipped examples, such as ``pandas``,
-``sympy``, ``ultranest``, ``h5py``, and ``numba``. The only accelerated
-dependency that is intentionally optional is ``NumbaMinpack``; see
-`Optional FastRMF dependency`_ below.
-
-Alternative Installation Method
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-If you encounter issues using ``pip install``, you can install the package manually:
-
-1. **Clone the Repository**
-
-   Clone the CompactObject repository:
-
-   .. code-block:: bash
-
-      git clone https://github.com/ChunHuangPhy/CompactObject.git
-
-2. **Install the Required Dependencies**
-
-   Navigate to the repository directory and install the dependencies:
-
-   .. code-block:: bash
-
-      pip install -r requirements.txt
-
-3. **Install the CompactObject Package**
-
-   Install the package in editable mode:
-
-   .. code-block:: bash
-
-      pip install -e .
-
-   To run the example notebooks from a source checkout, install the notebook
-   extras as well. The base package supplies the scientific runtime
-   dependencies; this extra supplies Jupyter and notebook execution tools:
-
-   .. code-block:: bash
-
-      pip install -e ".[notebooks]"
-
-   To include the optional FastRMF benchmark path used by some examples, use:
-
-   .. code-block:: bash
-
-      pip install -e ".[notebooks,fast]"
-
-To upgrade to the latest version on PyPI, run:
+To run the example notebooks from a source checkout, install the package's
+``notebooks`` extra:
 
 .. code-block:: bash
 
-   pip install CompactObject-TOV --upgrade
+   git clone https://github.com/ChunHuangPhy/CompactObject.git
+   cd CompactObject
+   python -m pip install -e ".[notebooks]"
 
-Step 4: Using the Package
-^^^^^^^^^^^^^^^^^^^^^^^^^
+The dependencies declared in ``pyproject.toml`` are installed automatically.
+There is no separate ``requirements.txt`` dependency list.
 
-You are now ready to use CompactObject. Each time you want to use the package, ensure you activate the environment:
+Conda environment
+-----------------
 
-.. code-block:: bash
-
-   source CompactObject/bin/activate
-
-Alternative: Using Anaconda
----------------------------
-
-Step 1: Create a Virtual Environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can also create a virtual environment for CompactObject using Anaconda:
+The repository includes an ``environment.yml`` file. It explicitly installs
+Python into the environment and installs the runtime and notebook dependencies
+from ``conda-forge``:
 
 .. code-block:: bash
 
-   conda create -n CompactObject
-
-When prompted to proceed, type ``y`` and press Enter.
-
-Step 2: Activate the Environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Activate your newly created environment with the following command:
-
-.. code-block:: bash
-
+   git clone https://github.com/ChunHuangPhy/CompactObject.git
+   cd CompactObject
+   conda env create --file environment.yml
    conda activate CompactObject
+   python -m pip install --no-deps --no-build-isolation -e .
 
-**Note:** Once you create this environment, you don't need to create it again. Simply activate it whenever you want to use CompactObject.
+The final command installs only the CompactObject source package. The
+``--no-deps`` and ``--no-build-isolation`` options are intentional because the
+runtime and build dependencies have already been installed by Conda. Using
+``python -m pip`` also guarantees that pip belongs to the Python interpreter in
+the active environment.
 
-Step 3: Install the CompactObject Package
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Do not use ``conda create -n CompactObject`` without listing Python. An empty
+Conda environment has no local Python or pip executable, so a subsequent
+``pip`` command can resolve to the system installation and fail with an
+``externally-managed-environment`` error.
 
-Once the environment is activated, you can install the package from PyPI:
-
-.. code-block:: bash
-
-   pip install CompactObject-TOV
-
-The dependencies should be automatically installed for you.
-This includes the packages used by the shipped examples, such as ``pandas``,
-``sympy``, ``ultranest``, ``h5py``, and ``numba``. The only accelerated
-dependency that is intentionally optional is ``NumbaMinpack``; see
-`Optional FastRMF dependency`_ below.
-
-Alternative Installation Method
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-If you encounter issues using ``pip install``, you can install the package manually:
-
-1. **Clone the Repository**
-
-   Clone the CompactObject repository:
-
-   .. code-block:: bash
-
-      git clone https://github.com/ChunHuangPhy/CompactObject.git
-
-2. **Install the Required Dependencies**
-
-   Navigate to the repository directory and install the dependencies:
-
-   .. code-block:: bash
-
-      pip install -r requirements.txt
-
-3. **Install the CompactObject Package**
-
-   Install the package in editable mode:
-
-   .. code-block:: bash
-
-      pip install -e .
-
-   To run the example notebooks from a source checkout, install the notebook
-   extras as well. The base package supplies the scientific runtime
-   dependencies; this extra supplies Jupyter and notebook execution tools:
-
-   .. code-block:: bash
-
-      pip install -e ".[notebooks]"
-
-   To include the optional FastRMF benchmark path used by some examples, use:
-
-   .. code-block:: bash
-
-      pip install -e ".[notebooks,fast]"
-
-To upgrade to the latest version on PyPI, run:
+To update an existing environment after ``environment.yml`` changes, recreate
+it:
 
 .. code-block:: bash
 
-   pip install CompactObject-TOV --upgrade
+   conda env remove --name CompactObject
+   conda env create --file environment.yml
 
-Step 4: You're Ready to Use CompactObject!
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Dependency policy
+-----------------
 
-Whenever you want to use this package, remember to activate the environment first:
-
-.. code-block:: bash
-
-   conda activate CompactObject
-
-By following these instructions, you should have CompactObject installed and ready to use. If you encounter any issues during installation, please refer to the project's documentation or seek assistance from the community.
-
-..    Our package automatically installs all necessary dependencies for you. The dependencies include:
-
-..    - `corner`
-..    - `csv`
-..    - `itertools`
-..    - `math`
-..    - `matplotlib`
-..    - `numba`
-..    - `numbaminpack`
-..    - `numpy`
-..    - `os`
-..    - `pandas`
-..    - `scipy`
-..    - `sys`
-..    - `ultranest`
+``pyproject.toml`` is the canonical dependency declaration for pip builds and
+published package metadata. It lists direct, unpinned runtime dependencies so
+pip can select a mutually compatible set. ``environment.yml`` is the
+corresponding Conda-native environment and is tested separately in continuous
+integration. Exact package versions belong in a generated lock file for a
+specific reproducible analysis, not in the library's installation
+instructions.
 
 Optional FastRMF dependency
 ---------------------------
 
 ``CompactObject-TOV`` can use ``NumbaMinpack`` for the accelerated
 ``EOSgenerators.fastRMF_EoS`` path. This dependency is optional; the standard
-RMF and DDH examples work without it.
+RMF and DDH implementations work without it.
 
-``NumbaMinpack`` requires a Fortran compiler before installation. On macOS,
-the upstream project documents the following setup:
+``NumbaMinpack`` requires a Fortran compiler. On macOS, install GCC before the
+package:
 
 .. code-block:: bash
 
    brew install gcc
    python -m pip install NumbaMinpack
 
-On Debian/Ubuntu systems, install ``gfortran`` first:
+On Debian or Ubuntu, install ``gfortran`` and CMake first:
 
 .. code-block:: bash
 
    sudo apt-get install gfortran cmake
    python -m pip install NumbaMinpack
 
-To install CompactObject with the optional FastRMF dependencies from a source
-checkout, run:
+From a source checkout, the equivalent optional extra is:
 
 .. code-block:: bash
 
-   pip install -e ".[fast]"
+   python -m pip install -e ".[fast]"
 
-To install everything needed for documentation and notebook execution:
+For documentation and notebook development with the optional accelerated path:
 
 .. code-block:: bash
 
-   pip install -e ".[docs,notebooks,fast]"
-
-.. Summary
-.. -------
-
-.. - **Using Anaconda:**
-..   1. Create and activate the `CompactObject` environment.
-..   2. Install CompactObject with `pip`.
-..   3. Activate the environment whenever you use the package.
-
-.. - **Using Python Virtual Environment:**
-..   1. Create and activate the `CompactObject` virtual environment.
-..   2. Install CompactObject with `pip`.
-..   3. Activate the environment whenever you use the package.
-
-If you encounter any issues or have questions, feel free to reach out for support. Happy computing!
+   python -m pip install -e ".[docs,notebooks,fast]"

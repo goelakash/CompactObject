@@ -1,0 +1,51 @@
+name: Installation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pip-install-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .
+          python -m pip check
+      - name: Import package modules
+        run: |
+          python -c "import EOSgenerators.download_compose, EOSgenerators.RMF_DDH"
+          python -c "import InferenceWorkflow.BayesianSampler, InferenceWorkflow.DDH_Likelihood"
+          python -c "import TOVsolver.main, postprocessing.Cornerplot"
+
+  conda-install-smoke:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: CompactObject
+          environment-file: environment.yml
+          miniforge-version: latest
+          use-mamba: true
+      - name: Install package without replacing Conda dependencies
+        run: |
+          python -m pip install --no-deps --no-build-isolation -e .
+          python -m pip check
+      - name: Verify the active environment and imports
+        run: |
+          python -c "import os, pathlib, sys; assert pathlib.Path(os.environ['CONDA_PREFIX']).resolve() == pathlib.Path(sys.prefix).resolve(); print(sys.executable)"
+          python -c "import EOSgenerators.download_compose, EOSgenerators.RMF_DDH"
+          python -c "import InferenceWorkflow.BayesianSampler, InferenceWorkflow.DDH_Likelihood"
+          python -c "import TOVsolver.main, postprocessing.Cornerplot"

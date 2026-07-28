@@ -103,19 +103,31 @@ CompactObject includes the following components to facilitate neutron star EOS i
 
 ## Installation
 
-Below are the commands to install and update the CompactObject package, along with a link to PyPI.
+Install the [CompactObject-TOV package from
+PyPI](https://pypi.org/project/CompactObject-TOV/) in an isolated Python
+environment:
 
-### [PyPI - CompactObject-TOV](https://pypi.org/project/CompactObject-TOV/)
+```sh
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install CompactObject-TOV
+```
 
-1. **Install the Package**
-    ```sh
-    pip install CompactObject-TOV
-    ```
+For a Conda installation, clone the repository and create the supplied
+environment. This installs Python and the package dependencies with Conda
+before installing only the local CompactObject code with pip:
 
-2. **Update the Package**
-    ```sh
-    pip install CompactObject-TOV --upgrade
-    ```
+```sh
+git clone https://github.com/ChunHuangPhy/CompactObject.git
+cd CompactObject
+conda env create --file environment.yml
+conda activate CompactObject
+python -m pip install --no-deps --no-build-isolation -e .
+```
+
+See the [installation
+guide](https://chunhuangphy.github.io/CompactObject/installation.html) for
+notebook, development, and optional FastRMF dependencies.
 
 ### Importing the Package
 
