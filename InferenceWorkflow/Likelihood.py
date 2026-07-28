@@ -489,7 +489,9 @@ def ln_pQCD(EOS, rho_list=[0.92], points=1000):
        Specifies at which number densities (in fm^-3) to compute the pQCD contraint at.
         
     points : int, optional
-        Number of points used to compute the weight, a higher number allows for greater precisions.
+        Number of midpoint quadrature samples used to compute the weight over
+        the log-uniform renormalization-scale range from 1 to 4. A higher
+        number gives greater precision.
         
     Returns
     -------
@@ -503,24 +505,36 @@ def ln_pQCD(EOS, rho_list=[0.92], points=1000):
     Phys. Rev. Lett. 127, 162003 (2021).
     """
     
-    log_mean = 0
+    if not isinstance(points, (int, np.integer)) or points <= 0:
+        raise ValueError("points must be a positive integer")
+
+    log_x_step = np.log(4.0) / points
+    renormalization_scales = np.exp(
+        (np.arange(points, dtype=float) + 0.5) * log_x_step
+    )
+
+    log_mean = 0.0
     for rho in rho_list:
         energy   = np.interp(rho, EOS[0], EOS[1])
         pressure = np.interp(rho, EOS[0], EOS[2])
-        weight   = np.empty(points)
-
-        for i in range(points):    
-            X = np.exp(np.random.uniform( np.log(1), np.log(4) )) # Exp of the Log-linear distribution
-            # To apply random weightage of the renormalization scale between X=1 to X=4            
-            weight[i] = int(constraints(X, energy, pressure, rho)) 
-        log_mean += np.log(weight.mean())
+        accepted = np.fromiter(
+            (
+                constraints(scale, energy, pressure, rho)
+                for scale in renormalization_scales
+            ),
+            dtype=bool,
+            count=points,
+        )
+        weight = accepted.mean()
+        if weight == 0.0:
+            return -np.inf
+        log_mean += np.log(weight)
     log_mean = log_mean/len(rho_list)
                             
     return log_mean
 
 
 ########################################################################################################################
-
 
 
 

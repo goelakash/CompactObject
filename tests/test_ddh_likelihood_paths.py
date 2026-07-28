@@ -1,6 +1,7 @@
 import os
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import numpy as np
 
@@ -40,6 +41,31 @@ class DDHLikelihoodPathTests(unittest.TestCase):
         )
 
         self.assertTrue(np.isfinite(value))
+
+    def test_pqcd_likelihood_is_deterministic(self):
+        eos = np.array(
+            [
+                [0.5, 1.5],
+                [0.2, 0.8],
+                [0.1, 0.4],
+            ]
+        )
+
+        with patch(
+            "InferenceWorkflow.Likelihood.constraints",
+            side_effect=lambda scale, energy, pressure, rho: scale < 2.0,
+        ):
+            first = likelihood.ln_pQCD(eos, rho_list=[1.0], points=1000)
+            second = likelihood.ln_pQCD(eos, rho_list=[1.0], points=1000)
+
+        self.assertEqual(first, second)
+        self.assertAlmostEqual(first, np.log(0.5))
+
+    def test_pqcd_likelihood_rejects_invalid_point_count(self):
+        eos = np.ones((3, 2))
+
+        with self.assertRaisesRegex(ValueError, "positive integer"):
+            likelihood.ln_pQCD(eos, points=0)
 
 
 if __name__ == "__main__":

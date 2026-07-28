@@ -40,6 +40,14 @@ jobs:
             --output /tmp/test_TOVsolver.executed.ipynb \
             --ExecutePreprocessor.timeout=900 \
             --ExecutePreprocessor.kernel_name=python3
+          jupyter nbconvert \
+            --to notebook \
+            --execute Test_Case/test_Bayesian_inference_DDH.ipynb \
+            --output /tmp/test_Bayesian_inference_DDH.executed.ipynb \
+            --ExecutePreprocessor.timeout=900 \
+            --ExecutePreprocessor.kernel_name=python3 \
+            --TagRemovePreprocessor.enabled=True \
+            --TagRemovePreprocessor.remove_cell_tags=long-running
 
   build:
     runs-on: ubuntu-latest

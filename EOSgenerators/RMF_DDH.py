@@ -33,6 +33,11 @@ Matrix_b = np.array(
 Matrix_l = np.array([[0.0, -1.0, 1 / 2.0], [0.0, -1.0, 1 / 2.0]])
 
 
+def _uses_default_couplings(couplings):
+    """Return whether a model should use its bundled coupling constants."""
+    return isinstance(couplings, str) and couplings == "Default"
+
+
 
 def Function(type='Typel99', couplings="Default"):
     """
@@ -48,7 +53,7 @@ def Function(type='Typel99', couplings="Default"):
     type : str, optional
         Density-dependence model. Supported values are "Typel99", "Malik22",
         "Char23", and "UserDefined".
-    couplings : str or list, optional
+    couplings : str or array-like, optional
         Model-specific coupling constants. Use "Default" for the preset values
         of the selected model, or pass explicit coupling values.
 
@@ -63,7 +68,7 @@ def Function(type='Typel99', couplings="Default"):
         """
         Ref. 2008.04491v1
         """
-        if couplings == "Default":
+        if _uses_default_couplings(couplings):
             # DD-MEX model
             as_, av, ar, bs, bv, cs, cv, ds, dv, gs0, gv0, gr0, rho0 = [1.3970 , 1.3936 , 0.6202,
                                                                         1.3350 , 1.0191 , 
@@ -89,7 +94,7 @@ def Function(type='Typel99', couplings="Default"):
         """
         https://doi.org/10.3847/1538-4357/ac5d3c
         """
-        if couplings == "Default":
+        if _uses_default_couplings(couplings):
             # DDBm model
             as_, av, ar, gs0, gv0, grho0, rho0 = [0.086372, 0.054065, 0.509147, 9.180364, 10.981329, 3.826364*2, 0.150]
         else:
@@ -115,7 +120,7 @@ def Function(type='Typel99', couplings="Default"):
         """
         Functions used in: PhysRevD.108.103045 e-Print: 2307.12364 [nucl-th]
         """
-        if couplings == "Default":
+        if _uses_default_couplings(couplings):
             # Model I
             as_, av, ar, bs, bv, br, cs, cv, cr, ds, dv, dr, rho0 = [8.225494 , 10.426752, 0.64584657,
                                                                      2.7079569, 1.6468675, 5.2033131 ,

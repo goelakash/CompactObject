@@ -8,6 +8,17 @@ from TOVsolver.unit import MeV, fm
 
 
 class DDHChar23Tests(unittest.TestCase):
+    def test_malik22_accepts_numpy_coupling_array(self):
+        couplings = np.array(
+            [0.086372, 0.054065, 0.509147, 9.180364, 10.981329, 7.652728, 0.150]
+        )
+
+        functions = DDH.Function(type="Malik22", couplings=couplings)
+
+        self.assertEqual(len(functions), 6)
+        self.assertTrue(all(callable(function) for function in functions))
+        self.assertTrue(all(np.isfinite(function(0.16)) for function in functions))
+
     def test_builtin_char23_matches_user_defined_form(self):
         oneoverfm_mev = 197.33
         m_sig = 550.0 / oneoverfm_mev
