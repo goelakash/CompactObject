@@ -47,6 +47,9 @@ docs = [
   "sphinx-rtd-theme",
   "sphinxcontrib-websupport",
 ]
+test = [
+  "pytest",
+]
 
 [project.urls]
 Homepage = "https://github.com/ChunHuangPhy/CompactOject"
@@ -73,4 +76,17 @@ EOSgenerators = [
 ]
 InferenceWorkflow = [
   "data/*",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+  "tests",
+]
+addopts = [
+  "-ra",
+  "--strict-config",
+  "--strict-markers",
+]
+filterwarnings = [
+  "error::RuntimeWarning",
 ]

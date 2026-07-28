@@ -16,6 +16,7 @@ dependencies:
   - numba
   - numpy
   - pandas
+  - pytest
   - requests
   - scipy
   - sympy

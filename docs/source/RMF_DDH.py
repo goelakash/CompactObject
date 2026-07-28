@@ -256,15 +256,18 @@ def beta_equilibrium_function(x, args):
         
         E_fb = mu_b - g_omega*omega - g_rho*rho_03*Matrix_b[i,2] - Sigma_0R
         
-        k_fb_sq = E_fb**2 - m_eff[i]**2
-        if k_fb_sq <= 0:
-            k_fb_sq = 0
-            E_fb    = m_eff[i]
-        
-        k_fb = math.sqrt(k_fb_sq)
-        
-        rho_B  = k_fb**3 / (3.*math.pi**2)
-        rho_SB = (m_eff[i]/(2.*math.pi**2))*(E_fb*k_fb - (m_eff[i]**2)*np.log((E_fb + k_fb )/m_eff[i]))
+        effective_mass = m_eff[i]
+        # The nonlinear solver may probe states where this species is unoccupied.
+        if effective_mass <= 0.0 or E_fb <= effective_mass:
+            rho_B = 0.0
+            rho_SB = 0.0
+        else:
+            k_fb = math.sqrt(max(E_fb**2 - effective_mass**2, 0.0))
+            rho_B = k_fb**3 / (3.0 * math.pi**2)
+            rho_SB = (effective_mass / (2.0 * math.pi**2)) * (
+                E_fb * k_fb
+                - effective_mass**2 * math.log((E_fb + k_fb) / effective_mass)
+            )
         
         rho_B_list.append(rho_B)
         rho_SB_list.append(rho_SB)

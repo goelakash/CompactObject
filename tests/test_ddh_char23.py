@@ -1,4 +1,5 @@
 import unittest
+import warnings
 
 import numpy as np
 
@@ -81,8 +82,13 @@ class DDHChar23Tests(unittest.TestCase):
             dtype=object,
         )
 
-        eos_char23 = DDH.compute_eos([0], [0], theta_char23)
-        eos_user = DDH.compute_eos([0], [0], theta_user)
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", RuntimeWarning)
+            eos_char23 = DDH.compute_eos([0], [0], theta_char23)
+            eos_user = DDH.compute_eos([0], [0], theta_user)
+
+        self.assertTrue(np.all(np.isfinite(eos_char23)))
+        self.assertTrue(np.all(np.isfinite(eos_user)))
 
         np.testing.assert_allclose(
             eos_char23[1] / (MeV * fm ** (-3)),

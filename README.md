@@ -129,6 +129,18 @@ See the [installation
 guide](https://chunhuangphy.github.io/CompactObject/installation.html) for
 notebook, development, and optional FastRMF dependencies.
 
+### Running the Tests
+
+From a source checkout:
+
+```sh
+python -m pip install -e ".[test]"
+python -m pytest
+```
+
+The full contributor guide also documents how to run individual test modules
+and test cases.
+
 ### Importing the Package
 
 - **For EOS Computation:**
