@@ -16,6 +16,8 @@
    :maxdepth: 2
    :caption: Development
    
+   testing
+   releasing
    Contributor
 
 .. toctree::

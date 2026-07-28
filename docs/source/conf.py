@@ -31,8 +31,8 @@ copyright = '2024, Chun Huang, João Cartaxo, Tuhin Malik, Wenli Yuan,Shashwat S
 author = 'Chun Huang, João Cartaxo, Tuhin Malik, Wenli Yuan, Shashwat Sourav, Xuezhi Liu, Tianzhe Zhou, John Groger, Zhiheng Wang, Nicole Osborn, Nathan Whitsettt'
 
 # The full version, including alpha/beta/rc tags
-version = '1.9.9'
-release = '1.9.9'
+version = '2.1.1'
+release = '2.1.1'
 
 
 # -- General configuration ---------------------------------------------------

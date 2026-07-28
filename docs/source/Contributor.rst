@@ -6,32 +6,7 @@ Introduction
 
 If you are interested in contributing to the **CompactObject** project, please send an email to `chun.h@wustl.edu <mailto:chun.h@wustl.edu>`_ to request collaboration. You can also open an issue on our GitHub repository at `Issue page <https://github.com/ChunHuangPhy/CompactObject/issues>`_ so that the community can track the status of collaborations.
 
-We are always eager to expand our scope to include the most equation of state (EOS) computations currently available in the community, as well as the most relevant constraints. If you have your own EOS and wish to contribute, please follow the steps outlined below.
-
-Running the Tests
------------------
-
-From a source checkout, install CompactObject with the test dependencies:
-
-.. code-block:: bash
-
-   python -m pip install -e ".[test]"
-
-Run the complete test suite from the repository root:
-
-.. code-block:: bash
-
-   python -m pytest
-
-To run one test module or one specific test, pass its path or pytest node ID:
-
-.. code-block:: bash
-
-   python -m pytest tests/test_ddh_char23.py
-   python -m pytest tests/test_ddh_char23.py::DDHChar23Tests::test_builtin_char23_matches_user_defined_form
-
-The pytest configuration is stored in ``pyproject.toml``. Runtime warnings are
-treated as test failures so numerical domain errors cannot pass unnoticed.
+We are always eager to expand our scope to include the most equation of state (EOS) computations currently available in the community, as well as the most relevant constraints. If you have your own EOS and wish to contribute, please follow the steps outlined below. See :doc:`testing` for the test-suite setup and commands required before submitting a change.
 
 Contributing an Equation of State (EOS)
 ---------------------------------------

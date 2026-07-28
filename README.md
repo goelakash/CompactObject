@@ -138,8 +138,8 @@ python -m pip install -e ".[test]"
 python -m pytest
 ```
 
-The full contributor guide also documents how to run individual test modules
-and test cases.
+The [testing guide](https://chunhuangphy.github.io/CompactObject/testing.html)
+also documents Conda setup, individual test commands, and troubleshooting.
 
 ### Importing the Package
 
