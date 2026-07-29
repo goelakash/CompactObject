@@ -102,6 +102,24 @@ On Debian or Ubuntu, install ``gfortran`` and CMake first:
    sudo apt-get install gfortran cmake
    python -m pip install NumbaMinpack
 
+``NumbaMinpack`` builds a native library during installation. Some current
+CMake, compiler, Python, and platform combinations still fail in that upstream
+build even after the documented prerequisites are installed. For example,
+upstream `issue #10
+<https://github.com/Nicholaswogan/NumbaMinpack/issues/10>`_ reports a CMake
+compatibility failure on a newer Linux/Python environment.
+
+This does not block the standard CompactObject solvers. If the native build
+fails, omit the ``fast`` extra and continue with:
+
+.. code-block:: bash
+
+   python -m pip install -e ".[docs,notebooks]"
+
+The example notebook will skip only the FastRMF benchmark. Build and platform
+problems with ``NumbaMinpack`` should be reported to its `upstream issue
+tracker <https://github.com/Nicholaswogan/NumbaMinpack/issues>`_.
+
 From a source checkout, the equivalent optional extra is:
 
 .. code-block:: bash
