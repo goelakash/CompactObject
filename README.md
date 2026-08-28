@@ -175,7 +175,7 @@ also documents Conda setup, individual test commands, and troubleshooting.
 
 ## License
 
-Distributed under the GNU GPL-3.0 license. See `LICENSE.txt` for more information.
+Distributed under the GNU GPL-3.0-or-later license. See `LICENSE` for more information.
 
 <p align="right">(<a href="#compactobject">back to top</a>)</p>
 

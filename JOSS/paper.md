@@ -24,7 +24,7 @@ authors:
     orcid: 0009-0000-8504-9134
     affiliation: 4
   - name: Xuezhi Liu
-    orcid: 
+    orcid: 0009-0008-3286-7254
     affiliation: 5
   - name: John Groger
     orcid: 0000-0002-7054-9053
@@ -52,9 +52,7 @@ authors:
     affiliation: 1
   - name: Laura Tolos
     orcid: 0000-0002-6449-106X
-    affiliation: 8
-    affiliation: 9
-    affiliation: 10
+    affiliation: "8, 9, 10"
   - name: Anna Watts
     orcid: 0000-0002-1009-2354
     affiliation: 11
@@ -83,41 +81,124 @@ affiliations:
   - name: Anton Pannekoek Institute for Astronomy, University of Amsterdam, Science Park 904, 1090 GE Amsterdam, the Netherlands
     index: 11
 
-date: Oct 23 2021
+date: 28 August 2026
 bibliography: cojoss.bib
 ---
 
 
 # Summary
 
-The CompactObject package is an open-source software framework developed to constrain the neutron star equation of state (EOS) through Bayesian statistical inference. It integrates astrophysical observational constraints from X-ray timing, gravitational wave events, and radio measurements, as well as nuclear experimental constraints derived from perturbative Quantum Chromodynamics (pQCD) and Chiral Effective Field Theory ($\chi$EFT). The package supports a diverse range of EOS models, including meta-model like and several physics-motivated EOS models. It comprises three independent components: an EOS generator module that currently provided seven EOS choices, a Tolman–Oppenheimer–Volkoff (TOV) equation solver, enabling solve Mass Radius and Tidal deformability as observables, and a comprehensive Bayesian inference workflow module, including a whole pipeline of implementing EOS Bayesian inference. Each component can be independently utilized in various scientific research contexts, like nuclear physics and astrophysics. Additionally, CompactObject is designed to synergize with existing software such as [CompOSE](https://compose.obspm.fr), enabling the use of the CompOSE EOS database to expand the available EOS options.
+The equation of state (EOS) relates pressure, density, and composition in the
+interiors of neutron stars and determines observable quantities such as their
+masses, radii, and tidal deformabilities. **CompactObject** is an open-source
+Python framework for constructing or importing EOSs, calculating neutron-star
+structure, and constraining EOS parameters with Bayesian inference. Its modular
+design separates EOS generation, Tolman--Oppenheimer--Volkoff (TOV) integration,
+likelihood construction, sampling, and posterior visualization, so each layer can
+also be used independently. The package connects astrophysical measurements from
+radio timing, X-ray pulse-profile modelling, and gravitational waves with nuclear
+physics information from saturation properties, chiral effective field theory
+($\chi$EFT), and perturbative quantum chromodynamics (pQCD). It also reads cold
+EOS tables from CompOSE [@CompOSE2022], allowing tabulated models to be analysed
+through the same interfaces as built-in models.
 
 # Statement of need
 
-Understanding the equation of state (EOS) of neutron stars is important for understanding the fundamental physics governing ultra-dense matter. Neutron stars, with its core densities exceeding several time nuclear saturation density, have a crucial role to play in studying nuclear interactions under extreme conditions. However, inferring the EOS from observational and experimental data has significant challenges due to the complex interplay of astrophysical phenomena and nuclear physics. Many of these studies such as [@Raaijmakers2023] focus on EOS meta-models (which may be parameterized or non-parameterized) that attempt to span all reasonable mass-radius parameter space, rather than being driven by microphysics. In contrast, CompactObject achieves high accuracy and rapid computation for a family of physics-motivated EOSs, thereby enabling researchers to perform inferences based on physically motivated models and apply nuclear physics-related constraints derived from nuclear experiments.
+Inferring an EOS requires repeatedly translating model parameters into a
+thermodynamically consistent EOS, solving the stellar-structure equations, and
+evaluating heterogeneous observational and theoretical constraints. Comparing
+model families is particularly difficult if each is implemented with different
+unit conventions, crust matching, likelihoods, or sampling choices.
 
-CompactObject appears as a viable solution to these challenges by providing an open-source, robust platform designed for Bayesian inference on neutron star EOS constraints. Its comprehensive workflow integrates a wide range of EOSs, including not only physical and meta-models of neutron star EOSs but also strange star and quark star EOSs, which have been proposed to explain the nature of these compact objects, enabling a detailed exploration of dense matter physics. The package's user-friendly interface and modular architecture facilitate easy adoption and extension, allowing researchers to customize analyses and incorporate new EOSs as they become available. Furthermore, thorough documentation ensures that both novice and experienced users can effectively utilize the tool, promoting widespread accessibility and collaborative advancement in the field. By addressing the need for an integrated, flexible, and well-documented framework, CompactObject enhances the capability of nuclear astrophysicists to derive precise EOS constraints. 
+CompactObject supplies these operations in one reusable workflow. Its purpose is
+not to privilege one description of dense matter, but to make controlled
+comparisons between flexible parameterizations, nuclear empirical-parameter
+expansions, phenomenological field theories, and exotic compact-star models. The
+same likelihood and TOV machinery can therefore be applied across model classes,
+while model-specific outputs such as particle fractions and nuclear saturation
+properties remain accessible.
 
+# State of the field
 
-# The Compactobject package and science use
+Flexible piecewise-polytropic and speed-of-sound parameterizations are widely
+used to explore broad EOS spaces. We refer to these as *parameterized EOS
+descriptions*, not metamodels. Here, *nuclear metamodel* is reserved for an
+expansion of the energy per particle around nuclear saturation density in terms
+of empirical isoscalar and isovector parameters [@Margueron2018], which is also
+implemented in CompactObject.
 
-CompactObject is an open-source software package designed to apply astrophysical and nuclear physics constraints to EOS parameters. Currently, the available EOS options include polytropic EOSs and speed of sound model EOSs, both of which are meta-models. Additionally, the package supports physics-motivated models such as the Relativistic Mean Field (RMF) theory [@Tolos_2016,@Tolos_Centelles_Ramos_2017] and its density-dependent variant [@Hempel_2010,@Char_2014]. We integrated features for users to define the density dependent variant form by themselves, and which span most of the possibility of this family of models. Beyond neutron star EOS models, CompactObject also includes a strange star EOS based on the strangeon model [@2003ApJ...596L..59X] and the widely used MIT bag model [@PhysRevD.9.3471] for quark stars. 
+NEoST provides an open-source nested-sampling framework with flexible core
+parameterizations and low-density models informed by ab initio $\chi$EFT
+calculations [@Raaijmakers2025]. CompactObject is complementary: its particular
+emphasis is the use of a common inference interface for those flexible
+descriptions alongside physics-motivated models whose couplings, composition,
+and saturation properties can be inferred directly. This includes nonlinear and
+density-dependent relativistic mean-field (RMF) models, strangeon matter, and
+quark matter. Both approaches connect microscopic nuclear information and
+multimessenger data; they differ mainly in the model libraries and interfaces
+they expose.
 
-The package integrates various likelihood constraints, including routines for simulating mass-radius measurements from X-ray timing observations and analyzing mass-radius likelihoods from actual observational data. It also incorporates constraints from radio timing observations, gravitational wave observations related to tidal deformability, and nuclear physics constraints derived from saturation properties, pQCD [@Gorda:2022jvk] [@Providencia:2023rxc]
-and $\chi$EFT [@Hebeler:2013nza] [@Huth:2021bsp]
+# Software design and functionality
 
-Furthermore, CompactObject includes routines for EOS analysis that output additional properties of neutron stars, such as proton fraction and the number densities of different particles within the star. Other than these, CompactObject synergizes with the CompOSE database, allowing users to derive observational evidence directly into existing EOS models. The nested sampling pipeline implemented in CompactObject is based on UltraNest, providing a computational framework to extract Bayesian evidence for each integrated EOS model. For the inference pipeline, the package offers two sampling algorithm options: UltraNest (nested sampling) and emcee (Markov Chain Monte Carlo sampling). 
+The `EOSgenerators` module implements piecewise-polytropic and speed-of-sound
+parameterizations, a nuclear empirical-parameter expansion, nonlinear and
+density-dependent RMF models [@Tolos2017; @Malik2022], a user-defined
+density-dependent coupling interface, a strangeon EOS [@Xu2003], and the MIT bag
+model [@Chodos1974]. It also imports CompOSE and LAL-format tables. The
+`TOVsolver` module maps an EOS to mass--radius and mass--radius--tidal-
+deformability sequences and provides sound-speed and maximum-central-density
+diagnostics.
 
-CompactObject has been utilized to derive constraints on nucleonic RMF models [@Huang:2023grj] and hyperonic RMF models \citep[@Huang:2024rvj]. Ongoing projects include constraining the strangeon star EOS and exploring phase transitions and twin stars. Additionally, various nuclear and astrophysical constraints on RMF model with density-dependent couplings are being developed [@Malik:2022zol]
+`InferenceWorkflow` provides priors and likelihoods for mass, mass--radius, and
+tidal-deformability measurements; nuclear saturation properties; pure-neutron-
+matter constraints from $\chi$EFT [@Hebeler2013; @Huth2022]; and high-density
+pQCD consistency [@Gorda2023]. Its nested-sampling workflow uses UltraNest
+[@Buchner2021], while documented notebooks show complete inference pipelines.
+Posterior comparison plots are supplied by `postprocessing`. NumPy, SciPy,
+Numba, Jupyter, and corner.py provide the principal numerical and interactive
+infrastructure [@NumPy2011; @SciPy2020; @Numba2015; @Jupyter2016;
+@Corner2016]. Installation and notebook smoke tests run in continuous
+integration for both pip and Conda environments.
 
-The released version of CompactObject is readily accessible through its GitHub repository [@EoS_inference] under the MIT license and is archived on Zenodo repository [@COZenodo]. Comprehensive documentation and the complete workflow for implementing EOS inference are available in the GitHub repository. Future plans for CompactObject include expanding the range of available EOS options and conducting a detailed survey of existing EOS models to perform cross-comparisons of Bayesian evidence using current observational and experimental constraints.
+# Research impact
 
-Software: Python language [@10.1109/MCSE.2007.58], NumPy [@van_der_Walt_2011], MPI for Python [@DALCIN2008655], Numba [@numba], NumbaMinpack [@wogan_NumbaMinpack], Matplotlib [@Hunter:2007], Jupyter [@2016ppap.book...87K], UltraNest [@2021JOSS....6.3001B], emcee [@Foreman_Mackey_2013], SciPy [@2020SciPy-NMeth], Seaborn [@Waskom2021], corner.py [@corner]
+CompactObject has supported published Bayesian studies of nucleonic RMF models
+[@Huang2024], hyperonic RMF models [@Huang2025], strangeon matter
+[@Yuan2025], and first-order phase transitions [@HuangSourav2025]. A systematic
+cross-comparison of covariant energy-density functionals has subsequently used
+the package to apply identical astrophysical, $\chi$EFT, and pQCD constraints
+across multiple model families [@Cartaxo2026]. These applications demonstrate
+the intended use of the software for reproducible inference and model comparison
+rather than only prospective functionality.
+
+The source, examples, tests, and documentation are available from the project
+repository [@CompactObjectRepo], and versioned releases are archived on Zenodo
+[@COZenodo]. CompactObject is distributed under the GNU General Public License,
+version 3 or later (GPL-3.0-or-later), consistently with the repository's
+`LICENSE` file.
+
+# AI usage disclosure
+
+OpenAI Codex was used during the review revision to assist with language editing
+and bibliography auditing. The authors checked the resulting text against the
+source code and primary literature and take responsibility for the manuscript's
+content.
 
 ## Acknowledgements
 
-H.C., S.S., O.N., W.N. and J.G. acknowledge support from the Arts \& Sciences Fellowship of Washington University in St Louis. H.C. also acknoledge support from NASA grant 80NSSC24K1095. 
-C.P. received support from Fundação para a Ciência e a Tecnologia (FCT), I.P., Portugal, under the  projects UIDB/04564/2020 (doi:10.54499/UIDB/04564/2020), UIDP/04564/2020 (doi:10.54499/UIDP/04564/2020), and 2022.06460.PTDC (doi:10.54499/2022.06460.PTDC).
-L.T. acknowledges support from CEX2020-001058-M (Unidad de Excelencia ``Mar\'{\i}a de Maeztu") and PID2022-139427NB-I00 financed by the Spanish MCIN/AEI/10.13039/501100011033/FEDER,UE as well as from the Generalitat de Catalunya under contract 2021 SGR 171,  from the Generalitat Valenciana under contract CIPROM/2023/59 and by the CRC-TR 211 'Strong-interaction matter under extreme conditions'- project Nr. 315477589 - TRR 211. A.L.W. acknowledges support from ERC Consolidator Grant No.~865768 AEONS. A.C. acknowlege the support from NSF grants DMS-2235457 and AST-2308111.
+C.H., S.S., N.O., N.W., and J.G. acknowledge support from the Arts & Sciences
+Fellowship of Washington University in St. Louis. C.H. also acknowledges support
+from NASA grant 80NSSC24K1095. C.P. received support from Fundação para a
+Ciência e a Tecnologia (FCT), I.P., Portugal, under projects UIDB/04564/2020
+(doi:10.54499/UIDB/04564/2020), UIDP/04564/2020
+(doi:10.54499/UIDP/04564/2020), and 2022.06460.PTDC
+(doi:10.54499/2022.06460.PTDC). L.T. acknowledges support from
+CEX2020-001058-M (Unidad de Excelencia "María de Maeztu") and
+PID2022-139427NB-I00 financed by the Spanish
+MCIN/AEI/10.13039/501100011033/FEDER, EU; Generalitat de Catalunya contract
+2021 SGR 171; Generalitat Valenciana contract CIPROM/2023/59; and CRC-TR 211,
+project 315477589 ("Strong-interaction matter under extreme conditions").
+A.L.W. acknowledges support from ERC Consolidator Grant 865768 AEONS. A.C.
+acknowledges support from NSF grants DMS-2235457 and AST-2308111.
 
 # References
