@@ -20,7 +20,6 @@ classifiers = [
 dependencies = [
   "corner",
   "h5py",
-  "lxml",
   "matplotlib",
   "numpy",
   "pandas",

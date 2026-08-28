@@ -10,7 +10,6 @@ dependencies:
   - h5py
   - ipykernel
   - jupyter
-  - lxml
   - matplotlib
   - nbconvert
   - numba

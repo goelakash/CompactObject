@@ -13,6 +13,28 @@ oneoverfm_MeV = constant.oneoverfm_MeV
 c = constant.c
 G = constant.G
 
+
+def gaussian_log_likelihood(model, observed, uncertainty):
+    """Return the log-likelihood for independent Gaussian measurements.
+
+    The calculation is performed directly in log space so that unlikely model
+    predictions do not underflow through ``log(exp(...))`` and create an
+    artificial constant likelihood plateau.
+    """
+    model = np.asarray(model, dtype=float)
+    observed = np.asarray(observed, dtype=float)
+    uncertainty = np.asarray(uncertainty, dtype=float)
+
+    if np.any(uncertainty <= 0):
+        raise ValueError("Gaussian uncertainties must all be positive")
+
+    residual = (model - observed) / uncertainty
+    log_density = -0.5 * (
+        residual**2 + np.log(2 * np.pi * uncertainty**2)
+    )
+    return float(np.sum(log_density))
+
+
 def MRlikihood_kernel(eps_total,pres_total,x,d1):
     """Computing likelihood from a distribution of MR measurement
     
@@ -535,7 +557,6 @@ def ln_pQCD(EOS, rho_list=[0.92], points=1000):
 
 
 ########################################################################################################################
-
 
 
 
